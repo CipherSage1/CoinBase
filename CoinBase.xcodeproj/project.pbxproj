@@ -30,24 +30,17 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		3012D7D52E40756500913A41 /* Exceptions for "CoinBase" folder in "CoinBase" target */ = {
+		3012D80A2E4075A600913A41 /* Exceptions for "CoinBase" folder in "CoinBase" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				UI/Components/Input/Untitled.swift,
 			);
 			target = 3012D7A92E40756300913A41 /* CoinBase */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		3012D7AC2E40756300913A41 /* CoinBase */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				3012D7D52E40756500913A41 /* Exceptions for "CoinBase" folder in "CoinBase" target */,
-			);
-			path = CoinBase;
-			sourceTree = "<group>";
-		};
 		3012D7C62E40756500913A41 /* CoinBaseTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CoinBaseTests;
@@ -56,6 +49,14 @@
 		3012D7D02E40756500913A41 /* CoinBaseUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CoinBaseUITests;
+			sourceTree = "<group>";
+		};
+		3012D8022E4075A600913A41 /* CoinBase */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3012D80A2E4075A600913A41 /* Exceptions for "CoinBase" folder in "CoinBase" target */,
+			);
+			path = CoinBase;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -88,7 +89,7 @@
 		3012D7A12E40756300913A41 = {
 			isa = PBXGroup;
 			children = (
-				3012D7AC2E40756300913A41 /* CoinBase */,
+				3012D8022E4075A600913A41 /* CoinBase */,
 				3012D7C62E40756500913A41 /* CoinBaseTests */,
 				3012D7D02E40756500913A41 /* CoinBaseUITests */,
 				3012D7AB2E40756300913A41 /* Products */,
@@ -121,7 +122,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				3012D7AC2E40756300913A41 /* CoinBase */,
+				3012D8022E4075A600913A41 /* CoinBase */,
 			);
 			name = CoinBase;
 			packageProductDependencies = (
