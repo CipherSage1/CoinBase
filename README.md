@@ -26,13 +26,15 @@ Open your terminal and run the following command:
 
 ```bash
 git clone https://github.com/CipherSage1/CoinBase.git
+```
 
-## 📂 Navigate into the Project Directory
+# 📂 Navigate into the Project Directory
 
 ```bash
 cd coinbase
+```
 
-## 🛠️ Open in Xcode
+# 🛠️ Open in Xcode
 
 1. Open the project folder.
 2. Double-click on the `coinbase.xcodeproj` or `coinbase.xcworkspace` file to open the project in **Xcode**.
