@@ -25,4 +25,9 @@ Before you begin, make sure you have:
 Open your terminal and run the following command:
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
+git clone https://github.com/CipherSage1/CoinBase.git
+
+## 📂 Navigate into the Project Directory
+
+```bash
+cd coinbase
