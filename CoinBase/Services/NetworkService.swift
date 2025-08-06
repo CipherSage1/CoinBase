@@ -12,12 +12,13 @@ class NetworkService {
     private let baseURL: String
     private let session: URLSession
     
-    init(baseURL: String = "https://api.coinranking.com/v2", session: URLSession = .shared) {
+    init(baseURL: String = AppConfig.baseURL, session: URLSession = .shared) {
         self.baseURL = baseURL
         self.session = session
     }
     
     func createUrl(endpoint: String,  method: NetworkMethods, parameters: [String: Any]? = nil)-> URL? {
+        
          
         let urlString = baseURL + endpoint
         var components = URLComponents(string: urlString)
@@ -39,6 +40,9 @@ class NetworkService {
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         
+        // 🛡️ Add API key header (if needed by the backend)
+        // request.setValue(AppConfig.apiKey, forHTTPHeaderField: "x-access-token")
+        
         session.dataTask(with: request) { data, response, error in
             
             if let error = error {
@@ -47,6 +51,12 @@ class NetworkService {
             
             if let httpResponse = response as? HTTPURLResponse,
                !(200...299).contains(httpResponse.statusCode) {
+                
+                if let data = data,
+                   let serverError = try? JSONDecoder().decode(ServerErrorResponse.self, from: data) {
+                    return completion(.failure(NetworkError.custom(serverError.message)))
+                }
+                
                 return completion(.failure(NetworkError.serverError(httpResponse.statusCode)))
             }
             

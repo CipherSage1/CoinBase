@@ -29,7 +29,6 @@ public struct LowerComponent: View {
                     .foregroundColor(Color.appLightGrayText)
             }
             
-            
             // Time Range Buttons
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
