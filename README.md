@@ -31,3 +31,9 @@ git clone https://github.com/CipherSage1/CoinBase.git
 
 ```bash
 cd coinbase
+
+## 🛠️ Open in Xcode
+
+1. Open the project folder.
+2. Double-click on the `coinbase.xcodeproj` or `coinbase.xcworkspace` file to open the project in **Xcode**.
+3. Wait for Xcode to finish indexing and resolving dependencies.
