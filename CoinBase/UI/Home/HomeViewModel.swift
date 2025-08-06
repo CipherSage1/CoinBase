@@ -6,14 +6,23 @@
 //
 import Foundation
 import Combine
+import CoreData
 
 class HomeViewModel: ObservableObject {
     
     @Published var coins: [Coin] = []
     @Published var errorMessage: String? = nil
     
+    
     private var cancellables = Set<AnyCancellable>()
     private let repository = NetworkRepository()
+    
+    private let viewContext: NSManagedObjectContext?
+    
+    init(viewContext: NSManagedObjectContext) {
+           self.viewContext = viewContext
+       }
+    
     
     func fetchCoins() {
         repository.getAllCoins()
@@ -23,6 +32,7 @@ class HomeViewModel: ObservableObject {
                     self.errorMessage = error.localizedDescription
                 }
             } receiveValue: { coins in
+                
                 self.coins = coins
             }
             .store(in: &cancellables)
@@ -43,4 +53,30 @@ class HomeViewModel: ObservableObject {
             return ascending ? vol1 < vol2 : vol1 > vol2
         }
     }
+    
+    func handleSaveFavourite(coin: CoinStore) {
+        guard let context = viewContext else {
+            print("ViewContext not set.")
+            return
+        }
+
+        // Optional: Check if already exists to avoid duplicates
+        let fetchRequest: NSFetchRequest<CoinEntity> = CoinEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", coin.id)
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            if results.isEmpty {
+                // Not in Core Data, save it
+                let _ = CoinEntity.from(coin, context: context)
+                try context.save()
+                print("Favourite saved: \(coin.name)")
+            } else {
+                print("Coin already saved as favourite.")
+            }
+        } catch {
+            print("Error saving favourite: \(error.localizedDescription)")
+        }
+    }
+    
 }

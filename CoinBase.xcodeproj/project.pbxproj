@@ -34,7 +34,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				UI/Components/Input/Untitled.swift,
 			);
 			target = 3012D7A92E40756300913A41 /* CoinBase */;
 		};

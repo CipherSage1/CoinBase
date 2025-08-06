@@ -6,17 +6,28 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct MainNavigation: View {
     
     @State private var selectedCoinId: String? = nil
+    @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var dataController: DataController
+    @StateObject private var homeViewModel: HomeViewModel
+    @StateObject private var favouriteViewModel: FavouriteViewModel
+
+    init(viewContext: NSManagedObjectContext) {
+        _homeViewModel = StateObject(wrappedValue: HomeViewModel(viewContext: viewContext))
+        _favouriteViewModel = StateObject(wrappedValue: FavouriteViewModel(viewContext: viewContext))
+    }
     
     var body: some View {
         
         NavigationStack {
             TabView {
-                HomeScreen(viewModel: HomeViewModel(), onCoinSelected: { coinId in
-                    print("SelectedCoinId: \(coinId)")
+                HomeScreen(
+                    viewModel: homeViewModel,
+                    onCoinSelected: { coinId in
                     self.selectedCoinId = coinId
                 })
                 .tabItem {
@@ -24,13 +35,13 @@ struct MainNavigation: View {
                     }
                 
                 Favourite(
+                    viewModel: favouriteViewModel,
                     onCoinSelected: { coinId in
-                        print("SelectedCoinId: \(coinId)")
                         self.selectedCoinId = coinId
                     }
                 )
                 .tabItem {
-                        Label("Favourites", systemImage: "heart")
+                     Label("Favourites", systemImage: "heart")
                 }
             }
             .navigationDestination(isPresented: Binding(
@@ -48,7 +59,6 @@ struct MainNavigation: View {
                 }
             })
         }
-        
         
     }
 }

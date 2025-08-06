@@ -59,6 +59,75 @@ struct Coin: Codable, Identifiable {
     }
 }
 
+extension Coin {
+    func toCoinStore() -> CoinStore {
+        CoinStore(
+            id: uuid,
+            symbol: symbol,
+            name: name,
+            iconUrl: iconUrl,
+            volume24h: volume24h,
+            price: price
+        )
+    }
+}
+struct CoinStore: Codable, Identifiable {
+    let id: String
+    let symbol: String
+    let name: String
+    let iconUrl: String?
+    let volume24h: String?
+    let price: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id = "uuid"
+        case symbol, name, iconUrl
+        case volume24h = "24hVolume"
+        case price
+    }
+}
+
+
+extension CoinStore {
+    func toCoin() -> Coin {
+        Coin(
+            uuid: id,
+            symbol: symbol,
+            name: name,
+            description: nil,
+            color: nil,
+            iconUrl: iconUrl,
+            websiteUrl: nil,
+            links: nil,
+            supply: nil,
+            numberOfMarkets: nil,
+            numberOfExchanges: nil,
+            volume24h: volume24h,
+            marketCap: nil,
+            fullyDilutedMarketCap: nil,
+            price: price,
+            btcPrice: nil,
+            priceAt: nil,
+            change: nil,
+            rank: nil,
+            sparkline: nil,
+            allTimeHigh: nil,
+            coinrankingUrl: nil,
+            tier: nil,
+            lowVolume: nil,
+            listedAt: nil,
+            hasContent: nil,
+            notices: nil,
+            contractAddresses: nil,
+            tags: nil,
+            isWrappedTrustless: nil,
+            wrappedTo: nil
+        )
+    }
+}
+
+
+
 struct Link: Codable {
     let name: String
     let url: String
