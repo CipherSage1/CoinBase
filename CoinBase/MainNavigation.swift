@@ -49,13 +49,7 @@ struct MainNavigation: View {
                 set: { if !$0 { selectedCoinId = nil } }
             ), destination: {
                 if let id = selectedCoinId {
-                    ListingDetails(
-                        viewModel: {
-                            let vm = ListingViewModel()
-                            vm.fetchListingDetails(coinUUID: id)
-                            vm.fetchCoinHistory(coinUUID: id)
-                            return vm
-                    }())
+                    ListingDetails(coinUUID: id)
                 }
             })
         }

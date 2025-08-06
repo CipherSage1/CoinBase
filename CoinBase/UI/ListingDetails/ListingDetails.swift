@@ -8,12 +8,12 @@ import SwiftUI
 
 struct ListingDetails: View {
     
-    @ObservedObject var viewModel: ListingViewModel
+    let coinUUID: String
+    @StateObject private var viewModel = ListingViewModel()
     
     var body: some View {
         ScrollView {
             VStack(alignment: .center, spacing: 16) {
-                
                 UpperComponent(
                     coinData: viewModel.listingDetails
                 )
@@ -34,10 +34,14 @@ struct ListingDetails: View {
                         viewModel.fetchCoinHistory(coinUUID: viewModel.listingDetails?.uuid ?? "", timePeriod: timePeriod)
                     }
                 
-                Spacer(minLength: 30) // Optional padding at bottom for breathing room
+                Spacer(minLength: 30)
             }
             .padding()
         }
         .navigationTitle(viewModel.listingDetails?.name ?? "Details")
+        .onAppear {
+            viewModel.fetchListingDetails(coinUUID: coinUUID)
+            viewModel.fetchCoinHistory(coinUUID: coinUUID)
+        }
     }
 }

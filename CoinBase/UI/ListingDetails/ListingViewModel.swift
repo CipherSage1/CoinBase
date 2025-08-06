@@ -17,14 +17,13 @@ class ListingViewModel: ObservableObject {
     
     func fetchListingDetails(coinUUID: String) {
         repository.getCoinById(coinUUID: coinUUID)
-            .receive(on: DispatchQueue.main) // ✅ ensure UI updates on main thread
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] coin in
                 self?.listingDetails = coin
             })
             .store(in: &cancellables)
     }
-    
     
     func fetchCoinHistory(coinUUID: String, timePeriod: TimePeriod? = .oneYear) {
         repository.getCoinHistory(coinUUID: coinUUID, timePeriod: timePeriod ?? .oneYear)

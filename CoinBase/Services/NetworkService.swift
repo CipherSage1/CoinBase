@@ -40,8 +40,6 @@ class NetworkService {
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         
-        print("baseURL URL: \(url)")
-        
         // 🛡️ Add API key header (if needed by the backend)
         // request.setValue(AppConfig.apiKey, forHTTPHeaderField: "x-access-token")
         
