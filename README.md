@@ -39,3 +39,26 @@ cd coinbase
 1. Open the project folder.
 2. Double-click on the `coinbase.xcodeproj` or `coinbase.xcworkspace` file to open the project in **Xcode**.
 3. Wait for Xcode to finish indexing and resolving dependencies.
+
+## ⚙️ Configuration
+
+Before building the project, you need to set up your environment configuration.
+
+1. In the root of the codebase, navigate to:
+
+2. Open the `coinbase.xcconfig` file in your text editor or directly in Xcode.
+
+3. Add the following key-value pairs to configure your API:
+
+```xcconfig
+BASE_URL=Shared on email
+API_KEY=Shared on email
+```
+
+## ▶️ Build and Run the App
+
+Once configuration is complete:
+
+1. Open the project in **Xcode**.
+2. Select a **simulator** or a connected **iOS device** from the device selector at the top.
+3. Press `Cmd + R` or click the ▶️ **Run** button to build and launch the app.
