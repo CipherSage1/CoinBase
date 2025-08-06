@@ -26,7 +26,5 @@ class DataController: ObservableObject  {
                 print("Description: \(description)")
             }
         }
-        
     }
-    
 }

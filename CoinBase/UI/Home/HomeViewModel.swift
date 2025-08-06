@@ -12,6 +12,7 @@ class HomeViewModel: ObservableObject {
     
     @Published var coins: [Coin] = []
     @Published var errorMessage: String? = nil
+    @Published var isLoading: Bool = false
     
     
     private var cancellables = Set<AnyCancellable>()
@@ -20,20 +21,22 @@ class HomeViewModel: ObservableObject {
     private let viewContext: NSManagedObjectContext?
     
     init(viewContext: NSManagedObjectContext) {
-           self.viewContext = viewContext
-       }
+        self.viewContext = viewContext
+        fetchCoins(offset: 0);
+    }
     
-    
-    func fetchCoins() {
-        repository.getAllCoins()
+    func fetchCoins(offset: Int) {
+        self.isLoading = true
+        repository.getAllCoins(offset: offset)
             .receive(on: DispatchQueue.main)
             .sink { completion in
+                self.isLoading = false
                 if case let .failure(error) = completion {
+                    print("Failure: \(error.localizedDescription)")
                     self.errorMessage = error.localizedDescription
                 }
             } receiveValue: { coins in
-                
-                self.coins = coins
+                self.coins.append(contentsOf: coins)
             }
             .store(in: &cancellables)
     }
@@ -59,11 +62,11 @@ class HomeViewModel: ObservableObject {
             print("ViewContext not set.")
             return
         }
-
-        // Optional: Check if already exists to avoid duplicates
+        
+        //Check if already exists to avoid duplicates
         let fetchRequest: NSFetchRequest<CoinEntity> = CoinEntity.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", coin.id)
-
+        
         do {
             let results = try context.fetch(fetchRequest)
             if results.isEmpty {
@@ -78,5 +81,4 @@ class HomeViewModel: ObservableObject {
             print("Error saving favourite: \(error.localizedDescription)")
         }
     }
-    
 }

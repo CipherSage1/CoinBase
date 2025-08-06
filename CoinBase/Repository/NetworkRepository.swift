@@ -17,7 +17,7 @@ class NetworkRepository: ObservableObject {
     }
     
     
-    func getAllCoins(offset: Int = 0) -> AnyPublisher<[Coin], Error> {
+    func getAllCoins(offset: Int) -> AnyPublisher<[Coin], Error> {
           return Future<[Coin], Error> { promise in
               self.networkService.makeRequest(endpoint: "/coins?limit=20&offset=\(offset)", method: .GET) { (result: Result<Response<CoinData>, Error>) in
                   switch result {

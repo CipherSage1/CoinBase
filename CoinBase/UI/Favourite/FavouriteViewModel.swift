@@ -16,7 +16,7 @@ class FavouriteViewModel: ObservableObject {
     
     init(viewContext: NSManagedObjectContext) {
         self.viewContext = viewContext
-        fetchFavourites() // Optionally auto-fetch on init
+        fetchFavourites()
     }
     
     func fetchFavourites() {
@@ -33,7 +33,33 @@ class FavouriteViewModel: ObservableObject {
             print("Fetched \(coins.count) favourite coins.")
         } catch {
             print("Error fetching favourites: \(error.localizedDescription)")
-            self.coins = [] // Optional: clear on failure
+            self.coins = []
         }
     }
+    
+    
+    func deleteFavourite(id: String) {
+        guard let context = viewContext else {
+            print("ViewContext not set.")
+            return
+        }
+
+        let fetchRequest: NSFetchRequest<CoinEntity> = CoinEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            if let coinToDelete = results.first {
+                context.delete(coinToDelete)
+                try context.save() // Save deletion
+                print("Deleted coin with id: \(id)")
+                fetchFavourites()
+            } else {
+                print("Coin with id \(id) not found.")
+            }
+        } catch {
+            print("Failed to delete coin: \(error.localizedDescription)")
+        }
+    }
+
 }

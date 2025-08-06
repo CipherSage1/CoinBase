@@ -13,9 +13,11 @@ struct TableView: UIViewControllerRepresentable {
     var onCoinSelected: (String) -> Void
     var onSwipeLeft: (Coin) -> Void
     var headerView: AnyView? = nil
+    var footerView: AnyView? = nil
+    var isFavourite: Bool = false
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(coins: coins, onCoinSelected: onCoinSelected)
+        Coordinator(coins: coins, onCoinSelected: onCoinSelected, isFavourite: isFavourite)
     }
     
     func makeUIViewController(context: Context) -> UITableViewController {
@@ -51,6 +53,30 @@ struct TableView: UIViewControllerRepresentable {
             }
         }
         
+        
+        
+        if let footerView = footerView {
+            let hostingController = UIHostingController(rootView: footerView)
+            hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+            hostingController.view.backgroundColor = .clear
+            
+            tableVC.addChild(hostingController)
+            tableVC.tableView.tableFooterView = hostingController.view
+            hostingController.didMove(toParent: tableVC)
+            
+            DispatchQueue.main.async {
+                hostingController.view.setNeedsLayout()
+                hostingController.view.layoutIfNeeded()
+                
+                let targetSize = CGSize(width: UIScreen.main.bounds.width, height: UIView.layoutFittingCompressedSize.height)
+                let height = hostingController.view.systemLayoutSizeFitting(targetSize).height
+                hostingController.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: height)
+                tableVC.tableView.tableFooterView = hostingController.view
+            }
+        }
+        
+        
+        
         return tableVC
     }
     
@@ -58,6 +84,7 @@ struct TableView: UIViewControllerRepresentable {
         context.coordinator.coins = coins
         context.coordinator.onCoinSelected = onCoinSelected
         context.coordinator.onSwipeLeft = onSwipeLeft
+        context.coordinator.isFavourite = isFavourite
         uiViewController.tableView.reloadData()
     }
     
@@ -65,11 +92,13 @@ struct TableView: UIViewControllerRepresentable {
         var coins: [Coin]
         var onCoinSelected: (String) -> Void
         var onSwipeLeft: ((Coin) -> Void)?
+        var isFavourite: Bool
         
-        init(coins: [Coin], onCoinSelected: @escaping (String) -> Void, onSwipeLeft: ((Coin) -> Void)? = nil) {
+        init(coins: [Coin], onCoinSelected: @escaping (String) -> Void, onSwipeLeft: ((Coin) -> Void)? = nil, isFavourite: Bool) {
             self.coins = coins
             self.onCoinSelected = onCoinSelected
             self.onSwipeLeft = onSwipeLeft
+            self.isFavourite = isFavourite
         }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,13 +126,13 @@ struct TableView: UIViewControllerRepresentable {
         func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
             let coin = coins[indexPath.row]
             
-            let favoriteAction = UIContextualAction(style: .normal, title: "Favorite") { [weak self] (action, view, completionHandler) in
+            let favoriteAction = UIContextualAction(style: .normal, title: isFavourite ? "Unfavorite" : "Favorite") { [weak self] (action, view, completionHandler) in
                 self?.onSwipeLeft?(coin)
                 completionHandler(true)
             }
             
-            favoriteAction.backgroundColor = UIColor.secondary
-            favoriteAction.image = UIImage(systemName: "heart.fill")
+            favoriteAction.backgroundColor = isFavourite ? UIColor.danger : UIColor.secondary
+            favoriteAction.image = UIImage(systemName: isFavourite ? "trash" : "heart.fill")
             
             let configuration = UISwipeActionsConfiguration(actions: [favoriteAction])
             configuration.performsFirstActionWithFullSwipe = false
